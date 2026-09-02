@@ -36,7 +36,13 @@ class DataTransformation:
                 "lunch",
                 "test_preparation_course",
             ]
-            
+            # Numerical Pipeline
+            num_pipeline = Pipeline(
+                steps=[
+                    ("imputer", SimpleImputer(strategy="median")),
+                    ("scaler", StandardScaler())
+                ]
+            )
             cats_pipeline =Pipeline(
                 
                 steps=[
@@ -51,7 +57,7 @@ class DataTransformation:
             preprocessor=ColumnTransformer(
                 [
                 ("num_pipeline",num_pipeline,numerical_columns),
-                ("cat_pipelines",cat_pipeline,categorical_columns)
+                ("cat_pipelines",cats_pipeline,categorical_columns)
                 ]
             )
             return preprocessor
