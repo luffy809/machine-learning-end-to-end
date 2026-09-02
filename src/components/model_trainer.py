@@ -20,11 +20,8 @@ from src.utils import save_object, evaluate_models
 
 
 # MODEL TRAINER CONFIGURATION
-
-
 @dataclass
 class ModelTrainerConfig:
-
     trained_model_file_path: str = os.path.join(
         "artifacts",
         "model.pkl"
@@ -34,25 +31,16 @@ class ModelTrainerConfig:
 # MODEL TRAINER
 
 class ModelTrainer:
-
     def __init__(self):
-
         self.model_trainer_config = ModelTrainerConfig()
 
-    # 
+    
     # INITIATE MODEL TRAINER
-
     def initiate_model_trainer(self, train_array, test_array):
-
         try:
-
-            logging.info(
-                "Split training and test input data"
-            )
+            logging.info("Split training and test input data")
 
             # Split train and test data
-            
-
             X_train = train_array[:, :-1]
             y_train = train_array[:, -1]
 
@@ -60,28 +48,19 @@ class ModelTrainer:
             y_test = test_array[:, -1]
 
             models = {
-
                 "Random Forest": RandomForestRegressor(),
-
                 "Decision Tree": DecisionTreeRegressor(),
-
                 "Gradient Boosting": GradientBoostingRegressor(),
-
                 "Linear Regression": LinearRegression(),
-
                 "XGBRegressor": XGBRegressor(),
-
                 "CatBoostRegressor": CatBoostRegressor(verbose=False),
-
                 "AdaBoost Regressor": AdaBoostRegressor(),
-
                 "K-Neighbors Regressor": KNeighborsRegressor(),
             }
 
             
             # Hyperparameters
             params = {
-
                 "Decision Tree": {
                     "criterion": [
                         "squared_error",
@@ -90,104 +69,31 @@ class ModelTrainer:
                         "poisson"
                     ]
                 },
-
                 "Random Forest": {
-                    "n_estimators": [
-                        8,
-                        16,
-                        32,
-                        64,
-                        128,
-                        256
-                    ]
+                    "n_estimators": [8,16,32,64,128,256]
                 },
-
                 "Gradient Boosting": {
-                    "learning_rate": [
-                        0.1,
-                        0.01,
-                        0.05,
-                        0.001
-                    ],
-                    "subsample": [
-                        0.6,
-                        0.7,
-                        0.75,
-                        0.8,
-                        0.85,
-                        0.9
-                    ],
-                    "n_estimators": [
-                        8,
-                        16,
-                        32,
-                        64,
-                        128,
-                        256
-                    ]
+                    "learning_rate": [0.1,0.01,0.5,0.001],
+                    "subsample": [0.1,0.01,0.05,0.001],
+                    "n_estimators": [8,16,32,64,128,256]
                 },
-
                 "Linear Regression": {},
 
                 "XGBRegressor": {
-                    "learning_rate": [
-                        0.1,
-                        0.01,
-                        0.05,
-                        0.001
-                    ],
-                    "n_estimators": [
-                        8,
-                        16,
-                        32,
-                        64,
-                        128,
-                        256
-                    ]
+                    "learning_rate": [0.1,0.01,0.05,0.001],
+                    "n_estimators": [8,16,32,64,128,256]
                 },
-
                 "CatBoostRegressor": {
-                    "depth": [
-                        6,
-                        8,
-                        10
-                    ],
-                    "learning_rate": [
-                        0.01,
-                        0.05,
-                        0.1
-                    ],
-                    "iterations": [
-                        30,
-                        50,
-                        100
-                    ]
+                    "depth": [6,8,10],
+                    "learning_rate": [0.01,0.05,0.1],
+                    "iterations": [30,50,100]
                 },
-
                 "AdaBoost Regressor": {
-                    "learning_rate": [
-                        0.1,
-                        0.01,
-                        0.5,
-                        0.001
-                    ],
-                    "n_estimators": [
-                        8,
-                        16,
-                        32,
-                        64,
-                        128,
-                        256
-                    ]
+                    "learning_rate": [0.1,0.01,0.5,0.001],
+                    "n_estimators": [8,16,32,64,128,256]
                 },
-
                 "K-Neighbors Regressor": {
-                    "n_neighbors": [
-                        3,
-                        5,
-                        7,
-                        9
-                    ]
+                    "n_neighbors": [3,5,7,9]
                 }
             }
 
@@ -200,18 +106,12 @@ class ModelTrainer:
                 models=models,
                 param=params
             )
-
             logging.info(
                 f"Model Report: {model_report}"
             )
-
-            
-
             best_model_score = max(
                 sorted(model_report.values())
             )
-
-            
             best_model_name = list(
                 model_report.keys()
             )[
@@ -219,40 +119,25 @@ class ModelTrainer:
                     best_model_score
                 )
             ]
-
-            
-
             best_model = models[best_model_name]
-
             logging.info(
                 f"Best model: {best_model_name}"
             )
-
             logging.info(
                 f"Best model score: {best_model_score}"
             )
-
-           
-
             if best_model_score < 0.6:
 
                 raise CustomException(
                     "No best model found"
                 )
-
             logging.info(
                 "Best model found on both training and testing datasets"
             )
-
-            
-
             best_model.fit(
                 X_train,
                 y_train
             )
-
-            
-
             save_object(
                 file_path=(
                     self.model_trainer_config
@@ -260,33 +145,20 @@ class ModelTrainer:
                 ),
                 obj=best_model
             )
-
             logging.info(
                 "Best model saved successfully"
             )
-
-           
-
             predicted = best_model.predict(
                 X_test
             )
-
-            
-
             r2_square = r2_score(
                 y_test,
                 predicted
             )
-
             logging.info(
                 f"R2 Score: {r2_square}"
             )
-
             return r2_square
 
         except Exception as e:
-
-            raise CustomException(
-                e,
-                sys
-            )
+            raise CustomException(e,sys)

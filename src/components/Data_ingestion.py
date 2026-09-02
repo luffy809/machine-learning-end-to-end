@@ -14,7 +14,6 @@ from src.components.model_Trainer import ModelTrainer
 
 
 # DATA INGESTION CONFIGURATION
-
 @dataclass
 class DataIngestionConfig:
     train_data_path: str = os.path.join(
