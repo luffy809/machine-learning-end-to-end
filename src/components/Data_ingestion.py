@@ -10,7 +10,7 @@ from src.Exceptions import CustomException
 from src.loggers import logging
 
 from src.components.Data_transformation import DataTransformation
-from src.components.model_Trainer import ModelTrainer
+from src.components.model_trainer import ModelTrainer
 
 
 # DATA INGESTION CONFIGURATION

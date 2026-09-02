@@ -2,5 +2,8 @@
     "dotnet.preferVisualStudioCodeFileSystemWatcher": true,
     "csharp.suppressHiddenDiagnostics": false,
     "scm.repositories.explorer": true,
-    "npm.enableRunFromFolder": false
+    "npm.enableRunFromFolder": false,
+    "cSpell.words": [
+        "modeltrainer"
+    ]
 }
